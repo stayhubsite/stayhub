@@ -9,6 +9,119 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url  	    = env("DATABASE_URL")
 }
+
+model Hotel {
+  id             Int             @id @default(autoincrement())
+  name           String
+  address        String
+  phoneNumber    String
+  users          User[]
+  rooms          Room[]
+  subscriptions  Subscription[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+}
+
+model User {
+  id             String          @id @default(uuid())
+  email          String          @unique
+  name           String?         // Add this line
+  password       String
+  role           Role            @relation(fields: [roleId], references: [id])
+  roleId         Int
+  hotelId        Int?
+  hotel          Hotel?          @relation(fields: [hotelId], references: [id])
+  subscriptions  Subscription[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  permission     Permission[]    @relation("UserPermissions")
+}
+
+
+model Role {
+  id             Int             @id @default(autoincrement())
+  name           String          @unique
+  permissions    Permission[]    @relation("RolePermissions") // Relaciona el rol con permisos específicos
+  users          User[]          // Los usuarios que tienen este rol
+}
+
+model Permission {
+  id             Int             @id @default(autoincrement())
+  name           String          @unique // Nombre del permiso (Ej: 'viewAllUsers', 'manageHotels', etc.)
+  roles          Role[]          @relation("RolePermissions")
+  user           User[]          @relation("UserPermissions")
+}
+
+
+model Room {
+  id             Int             @id @default(autoincrement())
+  number         String
+  type           String          // e.g., "Single", "Double", "Suite"
+  price          Float
+  status         RoomStatus      @default(AVAILABLE)
+  hotelId        Int
+  hotel          Hotel           @relation(fields: [hotelId], references: [id])
+  bookings       Booking[]
+}
+
+enum RoomStatus {
+  AVAILABLE
+  OCCUPIED
+  MAINTENANCE
+}
+
+model Booking {
+  id             Int             @id @default(autoincrement())
+  checkIn        DateTime
+  checkOut       DateTime
+  customerName   String
+  customerEmail  String
+  roomId         Int
+  room           Room            @relation(fields: [roomId], references: [id])
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+}
+
+model Subscription {
+  id             Int             @id @default(autoincrement())
+  startDate      DateTime
+  endDate        DateTime
+  status         SubscriptionStatus
+  userId         String
+  user           User            @relation(fields: [userId], references: [id])
+  hotelId        Int
+  hotel          Hotel           @relation(fields: [hotelId], references: [id])
+  paymentStatus  PaymentStatus   @default(PENDING)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  Payment Payment[]
+}
+
+
+enum SubscriptionStatus {
+  ACTIVE
+  INACTIVE
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+model Payment {
+  id             Int             @id @default(autoincrement())
+  amount         Float
+  status         PaymentStatus
+  subscriptionId Int
+  subscription   Subscription    @relation(fields: [subscriptionId], references: [id])
+  paymentDate    DateTime        @default(now())
+  transactionId  String          @unique
+}
+
