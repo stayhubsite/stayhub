@@ -43,11 +43,11 @@ const propertyTypes = [
 
 // Lista de países para el formulario
 const countries = [
-  { code: "US", name: "United States" },
-  { code: "GB", name: "United Kingdom" },
-  { code: "ES", name: "Spain" },
-  { code: "FR", name: "France" },
-  { code: "DE", name: "Germany" },
+  { code: "+1", name: "United States" },
+  { code: "+58", name: "Venezuela" },
+  { code: "+34", name: "Spain" },
+  { code: "+33", name: "France" },
+  { code: "+49", name: "Germany" },
   // Add more countries as needed
 ];
 
