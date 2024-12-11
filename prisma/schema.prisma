@@ -26,32 +26,35 @@ model Hotel {
 }
 
 model User {
-  id             Int             @id @default(autoincrement())
+  id             String          @id @default(uuid())
   email          String          @unique
+  name           String?         // Add this line
   password       String
   role           Role            @relation(fields: [roleId], references: [id])
   roleId         Int
-  hotelId        Int
-  hotel          Hotel           @relation(fields: [hotelId], references: [id])
-  permissions    Permission[]
+  hotelId        Int?
+  hotel          Hotel?          @relation(fields: [hotelId], references: [id])
   subscriptions  Subscription[]
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
+  permission     Permission[]    @relation("UserPermissions")
 }
+
 
 model Role {
   id             Int             @id @default(autoincrement())
   name           String          @unique
-  permissions    Permission[]
-  users          User[]
+  permissions    Permission[]    @relation("RolePermissions") // Relaciona el rol con permisos específicos
+  users          User[]          // Los usuarios que tienen este rol
 }
 
 model Permission {
   id             Int             @id @default(autoincrement())
-  name           String          @unique
-  roles          Role[]
-  users          User[]
+  name           String          @unique // Nombre del permiso (Ej: 'viewAllUsers', 'manageHotels', etc.)
+  roles          Role[]          @relation("RolePermissions")
+  user           User[]          @relation("UserPermissions")
 }
+
 
 model Room {
   id             Int             @id @default(autoincrement())
@@ -87,7 +90,7 @@ model Subscription {
   startDate      DateTime
   endDate        DateTime
   status         SubscriptionStatus
-  userId         Int
+  userId         String
   user           User            @relation(fields: [userId], references: [id])
   hotelId        Int
   hotel          Hotel           @relation(fields: [hotelId], references: [id])
@@ -97,6 +100,7 @@ model Subscription {
 
   Payment Payment[]
 }
+
 
 enum SubscriptionStatus {
   ACTIVE
