@@ -15,27 +15,35 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import LanguageIcon from "@mui/icons-material/Language";
-import ModalRL from "./ModalsRL";
+import ModalRL from "./ModalsRL"; // Componente para manejar inicio de sesión y registro.
 
+// Lista de páginas que se muestran en el menú de navegación.
 const pages = ["Features", "Enterprise Solutions", "Integrations"];
 
 export default function Navbar() {
+  // Estado para manejar el menú de navegación en dispositivos móviles.
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+  // Estado para manejar el menú de selección de idioma.
   const [anchorElLang, setAnchorElLang] = useState<null | HTMLElement>(null);
+  // Tema actual de la aplicación.
   const theme = useTheme();
 
+  // Abre el menú de navegación.
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
 
+  // Abre el menú de selección de idioma.
   const handleOpenLangMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElLang(event.currentTarget);
   };
 
+  // Cierra el menú de navegación.
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
 
+  // Cierra el menú de selección de idioma.
   const handleCloseLangMenu = () => {
     setAnchorElLang(null);
   };
@@ -46,14 +54,14 @@ export default function Navbar() {
       color="transparent"
       elevation={0}
       sx={{
-        backdropFilter: "blur(10px)",
-        backgroundColor: "rgba(255, 255, 255, 0.1)",
-        borderBottom: "1px solid rgba(255, 255, 255, 0.12)",
+        backdropFilter: "blur(10px)", // Aplica un efecto de desenfoque.
+        backgroundColor: "rgba(255, 255, 255, 0.1)", // Fondo semi-transparente.
+        borderBottom: "1px solid rgba(255, 255, 255, 0.12)", // Línea inferior tenue.
       }}
     >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          {/* Logo - Desktop */}
+          {/* Logo que se muestra en pantallas grandes */}
           <Typography
             variant="h6"
             noWrap
@@ -70,7 +78,7 @@ export default function Navbar() {
             StayHub
           </Typography>
 
-          {/* Mobile menu */}
+          {/* Menú para dispositivos móviles */}
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
@@ -108,7 +116,7 @@ export default function Navbar() {
             </Menu>
           </Box>
 
-          {/* Logo - Mobile */}
+          {/* Logo que se muestra en dispositivos móviles */}
           <Typography
             variant="h6"
             noWrap
@@ -126,7 +134,7 @@ export default function Navbar() {
             StayHub
           </Typography>
 
-          {/* Desktop menu */}
+          {/* Menú para pantallas grandes */}
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
@@ -137,7 +145,7 @@ export default function Navbar() {
                   color: "text.primary",
                   display: "block",
                   "&:hover": {
-                    color: "primary.main",
+                    color: "primary.main", // Cambia el color al pasar el mouse.
                   },
                 }}
               >
@@ -146,23 +154,26 @@ export default function Navbar() {
             ))}
           </Box>
 
-          {/* Action buttons */}
+          {/* Botones de acción */}
           <Box sx={{ flexGrow: 0, display: "flex", gap: 2 }}>
             <ModalRL />
 
+            {/* Botón para solicitar contacto */}
             <Button
               variant="contained"
               sx={{
                 bgcolor: "primary.main",
                 color: "white",
                 "&:hover": {
-                  bgcolor: "primary.dark",
+                  bgcolor: "primary.dark", // Color más oscuro al pasar el mouse.
                 },
                 display: { xs: "none", sm: "block" },
               }}
             >
               Request Contact
             </Button>
+
+            {/* Botón para cambiar el idioma */}
             <IconButton
               onClick={handleOpenLangMenu}
               sx={{ color: "text.primary" }}

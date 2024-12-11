@@ -1,63 +1,76 @@
 "use client";
-import * as React from "react";
-import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
-import Button from "@mui/material/Button";
 
+import * as React from "react"; // React para crear el componente
+import Box from "@mui/material/Box"; // Caja para el contenido del modal
+import Modal from "@mui/material/Modal"; // Componente modal (ventana emergente)
+import Button from "@mui/material/Button"; // Botón para interactuar
+
+// Aquí definimos cómo se verá el modal (ventana emergente)
 const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  pt: 2,
-  px: 4,
-  pb: 3,
+  position: "absolute", // La posición será absoluta dentro de la pantalla
+  top: "50%", // Centrado verticalmente
+  left: "50%", // Centrado horizontalmente
+  transform: "translate(-50%, -50%)", // Ajusta para que quede perfectamente centrado
+  width: 400, // Ancho del modal
+  bgcolor: "background.paper", // Color de fondo del modal
+  border: "2px solid #000", // Borde negro de 2px
+  boxShadow: 24, // Sombra para que se vea "elevado"
+  pt: 2, // Espacio en la parte de arriba (padding top)
+  px: 4, // Espacio a los lados (padding horizontal)
+  pb: 3, // Espacio en la parte de abajo (padding bottom)
 };
 
+// Aquí creamos el componente principal del modal
 export default function ModalRL() {
+  // Estado que controla si el modal está abierto o cerrado
   const [open, setOpen] = React.useState(false);
+
+  // Estado que controla qué paso se está mostrando: inicio, registro o login
   const [step, setStep] = React.useState<"initial" | "register" | "login">(
-    "initial"
+    "initial" // Comienza en la vista inicial
   );
 
   const handleOpen = () => {
-    setStep("initial");
-    setOpen(true);
+    setStep("initial"); // Siempre comenzamos en la vista inicial
+    setOpen(true); // Cambiamos el estado para abrir el modal
   };
 
   const handleClose = () => {
-    setOpen(false);
-    setStep("initial"); // Reinicia a la vista inicial
+    setOpen(false); // Cerramos el modal
+    setStep("initial"); // Reiniciamos la vista a la inicial
   };
 
+  // Función para cambiar a la vista de registro
   const handleRegisterClick = () => {
-    setStep("register");
+    setStep("register"); // Cambiamos el paso a registro
   };
 
+  // Función para cambiar a la vista de login
   const handleLoginClick = () => {
-    setStep("login");
+    setStep("login"); // Cambiamos el paso a login
   };
 
+  // Lo que se verá en pantalla
   return (
     <div>
       <Button onClick={handleOpen}>Ingresa</Button>
+
+      {/* Modal que aparece cuando el estado `open` es verdadero */}
       <Modal
         open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-title"
-        aria-describedby="modal-description"
+        onClose={handleClose} // Se cierra cuando haces clic afuera o llamas a esta función
+        aria-labelledby="modal-title" // Accesibilidad: título del modal
+        aria-describedby="modal-description" // Accesibilidad: descripción del modal
       >
         <Box sx={{ ...style, width: 400 }}>
+          {/* Vista inicial: opciones para registro o login */}
           {step === "initial" && (
             <>
               <h2 id="modal-title">Bienvenido</h2>
               <p id="modal-description">
                 Selecciona una opción para continuar.
               </p>
+              {/* Botones para cambiar de vista */}
               <Button onClick={handleRegisterClick} sx={{ m: 1 }}>
                 Registro
               </Button>
@@ -66,23 +79,27 @@ export default function ModalRL() {
               </Button>
             </>
           )}
+
+          {/* Vista de registro */}
           {step === "register" && (
             <>
               <h2 id="modal-title">Registro</h2>
               <p id="modal-description">
                 Por favor, completa tus datos para registrarte.
               </p>
-              {/* Aquí puedes agregar un formulario de registro */}
+              {/* Aquí puedes agregar un formulario para registro */}
               <Button onClick={handleClose}>Cerrar</Button>
             </>
           )}
+
+          {/* Vista de login */}
           {step === "login" && (
             <>
               <h2 id="modal-title">Login</h2>
               <p id="modal-description">
                 Ingresa tus credenciales para acceder.
               </p>
-              {/* Aquí puedes agregar un formulario de login */}
+              {/* Aquí puedes agregar un formulario para login */}
               <Button onClick={handleClose}>Cerrar</Button>
             </>
           )}

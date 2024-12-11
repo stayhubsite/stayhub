@@ -1,7 +1,8 @@
+// Importaciones necesarias para trabajar con React, animaciones y MUI (Material UI)
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion"; // Animaciones de framer-motion
 import {
   Box,
   Typography,
@@ -17,7 +18,7 @@ import {
   MenuItem,
   InputLabel,
   FormControl,
-} from "@mui/material";
+} from "@mui/material"; // Componentes de Material UI
 import {
   Hotel,
   HomeWork,
@@ -28,8 +29,9 @@ import {
   ArrowBack,
   Check,
   Flag,
-} from "@mui/icons-material";
+} from "@mui/icons-material"; // Iconos de Material UI
 
+// Lista de tipos de propiedades con sus iconos
 const propertyTypes = [
   { id: "hotel", label: "Hotel", icon: Hotel },
   { id: "bnb", label: "Bed & Breakfast", icon: House },
@@ -39,6 +41,7 @@ const propertyTypes = [
   { id: "other", label: "Other", icon: More },
 ];
 
+// Lista de países para el formulario
 const countries = [
   { code: "US", name: "United States" },
   { code: "GB", name: "United Kingdom" },
@@ -48,8 +51,12 @@ const countries = [
   // Add more countries as needed
 ];
 
+// Componente principal del formulario multi-pasos
 export default function MultiStepForm() {
+  // Estado para controlar el paso actual del formulario
   const [step, setStep] = useState(0);
+
+  // Estado para almacenar los datos del formulario
   const [formData, setFormData] = useState({
     propertyType: "",
     name: "",
@@ -60,17 +67,24 @@ export default function MultiStepForm() {
     companyName: "",
     phoneNumber: "",
   });
+
+  // Estado para controlar el estado de carga (loading)
   const [isLoading, setIsLoading] = useState(false);
+
+  // Usamos el tema de MUI
   const theme = useTheme();
 
+  // Función para avanzar al siguiente paso
   const handleNext = () => {
     setStep((prev) => prev + 1);
   };
 
+  // Función para retroceder al paso anterior
   const handleBack = () => {
     setStep((prev) => prev - 1);
   };
 
+  // Función para manejar el cambio de los inputs de tipo texto
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -78,6 +92,7 @@ export default function MultiStepForm() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Función para manejar el cambio de los selectores (como país o idioma)
   const handleSelectChange = (
     e: React.ChangeEvent<{ name?: string; value: unknown }>
   ) => {
@@ -86,34 +101,37 @@ export default function MultiStepForm() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Función para validar si el paso actual es válido (revisando los datos ingresados)
   const isStepValid = () => {
     switch (step) {
       case 0:
-        return !!formData.propertyType;
+        return !!formData.propertyType; // Verifica si se seleccionó un tipo de propiedad
       case 1:
-        return !!formData.name && !!formData.email;
+        return !!formData.name && !!formData.email; // Verifica si se ingresaron nombre y email
       case 2:
-        return !!formData.roomCount;
+        return !!formData.roomCount; // Verifica si se ingresó el número de habitaciones
       case 3:
-        return !!formData.country && !!formData.language;
+        return !!formData.country && !!formData.language; // Verifica si se seleccionó país y idioma
       case 4:
-        return !!formData.companyName && !!formData.phoneNumber;
+        return !!formData.companyName && !!formData.phoneNumber; // Verifica si se ingresaron empresa y teléfono
       default:
         return false;
     }
   };
 
+  // Función para manejar el envío del formulario
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simular una carga de 2 segundos
+    // Simula un proceso de carga de 2 segundos
     await new Promise((resolve) => setTimeout(resolve, 2000));
-    console.log("Form submitted:", formData);
+    console.log("Form submitted:", formData); // Muestra los datos del formulario en la consola
     setIsLoading(false);
-    // Here you would typically send the data to your backend
+    // Aquí se enviaría los datos a un servidor
   };
 
   return (
+    // Contenedor principal del formulario con un fondo de gradiente y algunos estilos
     <Paper
       elevation={3}
       sx={{
@@ -139,8 +157,10 @@ export default function MultiStepForm() {
         </Typography>
       </Box>
 
+      {/* Formulario que se maneja paso a paso */}
       <form onSubmit={handleSubmit}>
         <AnimatePresence mode="wait">
+          {/* Animación que cambia con cada paso */}
           <motion.div
             key={step}
             initial={{ y: -50, opacity: 0 }}
@@ -148,6 +168,7 @@ export default function MultiStepForm() {
             exit={{ y: 50, opacity: 0 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
           >
+            {/* Paso 1: Selección del tipo de propiedad */}
             {step === 0 && (
               <Box>
                 <Typography variant="h6" gutterBottom>
@@ -202,6 +223,7 @@ export default function MultiStepForm() {
               </Box>
             )}
 
+            {/* Paso 2: Información personal */}
             {step === 1 && (
               <Box>
                 <Typography variant="h6" gutterBottom>
@@ -230,6 +252,7 @@ export default function MultiStepForm() {
               </Box>
             )}
 
+            {/* Paso 3: Número de habitaciones */}
             {step === 2 && (
               <Box>
                 <Typography variant="h6" gutterBottom>
@@ -248,6 +271,7 @@ export default function MultiStepForm() {
               </Box>
             )}
 
+            {/* Paso 4: Ubicación y preferencias */}
             {step === 3 && (
               <Box>
                 <Typography variant="h6" gutterBottom>
@@ -283,6 +307,7 @@ export default function MultiStepForm() {
               </Box>
             )}
 
+            {/* Paso 5: Datos finales */}
             {step === 4 && (
               <Box>
                 <Typography variant="h6" gutterBottom>
@@ -296,89 +321,41 @@ export default function MultiStepForm() {
                   onChange={handleInputChange}
                   margin="normal"
                   required
-                  sx={{ mb: 2 }}
                 />
                 <TextField
                   fullWidth
                   label="Phone Number"
                   name="phoneNumber"
+                  type="tel"
                   value={formData.phoneNumber}
                   onChange={handleInputChange}
                   margin="normal"
                   required
-                  InputProps={{
-                    startAdornment: (
-                      <Typography variant="body1" sx={{ mr: 1 }}>
-                        +
-                        {countries.find((c) => c.code === formData.country)
-                          ?.code || ""}
-                      </Typography>
-                    ),
-                  }}
                 />
               </Box>
             )}
           </motion.div>
         </AnimatePresence>
 
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            mt: 4,
-          }}
-        >
-          <IconButton
+        {/* Botones de navegación entre pasos */}
+        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}>
+          <Button
             onClick={handleBack}
+            variant="outlined"
+            color="secondary"
             disabled={step === 0}
-            sx={{
-              color: "white",
-              visibility: step === 0 ? "hidden" : "visible",
-            }}
+            startIcon={<ArrowBack />}
           >
-            <ArrowBack />
-          </IconButton>
-          <Box sx={{ display: "flex", gap: 1 }}>
-            {[0, 1, 2, 3, 4].map((dot) => (
-              <Box
-                key={dot}
-                sx={{
-                  width: 8,
-                  height: 8,
-                  borderRadius: "50%",
-                  bgcolor: dot === step ? "white" : "rgba(255, 255, 255, 0.5)",
-                }}
-              />
-            ))}
-          </Box>
-          {step < 4 ? (
-            <Button
-              variant="contained"
-              onClick={handleNext}
-              disabled={!isStepValid()}
-              sx={{
-                bgcolor: "rgba(255, 255, 255, 0.2)",
-                color: "white",
-                "&:hover": {
-                  bgcolor: "rgba(255, 255, 255, 0.3)",
-                },
-                "&:disabled": {
-                  bgcolor: "rgba(255, 255, 255, 0.1)",
-                  color: "rgba(255, 255, 255, 0.5)",
-                },
-                backdropFilter: "blur(10px)",
-                transition: "all 0.3s ease",
-              }}
-            >
-              Next
-            </Button>
-          ) : (
-            <button>
-              <Flag sx={{ mr: 1 }} />
-              Finish
-            </button>
-          )}
+            Back
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={isStepValid() ? handleNext : undefined}
+            disabled={isLoading || !isStepValid()}
+          >
+            {step === 4 ? "Submit" : "Next"}
+          </Button>
         </Box>
       </form>
     </Paper>
