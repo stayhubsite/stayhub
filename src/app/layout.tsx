@@ -1,6 +1,9 @@
-import type { Metadata } from "next"
-import { Geist, Azeret_Mono as Geist_Mono } from 'next/font/google'
-import "./globals.css"
+import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import "./globals.css";
+import ContactForm from "@/components/ContactForm";
+import RecipeReviewCard from "@/components/CardOpinions";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,8 +28,11 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-          {children}
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        {children}
+        <ContactForm />
       </body>
     </html>
   )
