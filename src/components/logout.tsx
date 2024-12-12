@@ -15,7 +15,7 @@ const LogoutButton: React.FC = () => {
       });
 
       if (res.ok) {
-        router.push('/login');
+        router.push('/');
       } else {
         console.error('Error al cerrar sesión');
       }

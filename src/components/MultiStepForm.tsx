@@ -1,7 +1,7 @@
 // Importaciones necesarias para trabajar con React, animaciones y MUI (Material UI)
 "use client";
 
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion"; // Animaciones de framer-motion
 import {
   Box,
@@ -18,6 +18,7 @@ import {
   MenuItem,
   InputLabel,
   FormControl,
+  CircularProgress,
 } from "@mui/material"; // Componentes de Material UI
 import {
   Hotel,
@@ -28,11 +29,22 @@ import {
   More,
   ArrowBack,
   Check,
-  Flag,
 } from "@mui/icons-material"; // Iconos de Material UI
 
+// Definición de tipos para las propiedades y países
+interface PropertyType {
+  id: string;
+  label: string;
+  icon: React.ComponentType;
+}
+
+interface Country {
+  code: string;
+  name: string;
+}
+
 // Lista de tipos de propiedades con sus iconos
-const propertyTypes = [
+const propertyTypes: PropertyType[] = [
   { id: "hotel", label: "Hotel", icon: Hotel },
   { id: "bnb", label: "Bed & Breakfast", icon: House },
   { id: "hostel", label: "Hostel", icon: Apartment },
@@ -42,22 +54,34 @@ const propertyTypes = [
 ];
 
 // Lista de países para el formulario
-const countries = [
+const countries: Country[] = [
   { code: "+1", name: "United States" },
   { code: "+58", name: "Venezuela" },
   { code: "+34", name: "Spain" },
   { code: "+33", name: "France" },
   { code: "+49", name: "Germany" },
-  // Add more countries as needed
+  // Agrega más países según sea necesario
 ];
+
+// Definición del tipo para los datos del formulario
+interface FormData {
+  propertyType: string;
+  name: string;
+  email: string;
+  roomCount: string;
+  country: string;
+  language: string;
+  companyName: string;
+  phoneNumber: string;
+}
 
 // Componente principal del formulario multi-pasos
 export default function MultiStepForm() {
   // Estado para controlar el paso actual del formulario
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState<number>(0);
 
   // Estado para almacenar los datos del formulario
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     propertyType: "",
     name: "",
     email: "",
@@ -69,18 +93,27 @@ export default function MultiStepForm() {
   });
 
   // Estado para controlar el estado de carga (loading)
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  // Estado para manejar mensajes de error
+  const [error, setError] = useState<string>("");
 
   // Usamos el tema de MUI
   const theme = useTheme();
 
-  // Función para avanzar al siguiente paso
+  // Función para avanzar al siguiente paso o enviar el formulario
   const handleNext = () => {
-    setStep((prev) => prev + 1);
+    if (step < totalSteps - 1) {
+      setStep((prev) => prev + 1);
+    } else {
+      // Al llegar al último paso, enviamos el formulario
+      handleSubmit();
+    }
   };
 
   // Función para retroceder al paso anterior
   const handleBack = () => {
+    setError("");
     setStep((prev) => prev - 1);
   };
 
@@ -101,34 +134,98 @@ export default function MultiStepForm() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Total de pasos del formulario
+  const totalSteps = 5;
+
   // Función para validar si el paso actual es válido (revisando los datos ingresados)
-  const isStepValid = () => {
+  const isStepValid = (): boolean => {
     switch (step) {
       case 0:
-        return !!formData.propertyType; // Verifica si se seleccionó un tipo de propiedad
+        return formData.propertyType.trim() !== "";
       case 1:
-        return !!formData.name && !!formData.email; // Verifica si se ingresaron nombre y email
+        return (
+          formData.name.trim() !== "" && validateEmail(formData.email.trim())
+        );
       case 2:
-        return !!formData.roomCount; // Verifica si se ingresó el número de habitaciones
+        return (
+          formData.roomCount.trim() !== "" && Number(formData.roomCount) > 0
+        );
       case 3:
-        return !!formData.country && !!formData.language; // Verifica si se seleccionó país y idioma
+        return (
+          formData.country.trim() !== "" && formData.language.trim() !== ""
+        );
       case 4:
-        return !!formData.companyName && !!formData.phoneNumber; // Verifica si se ingresaron empresa y teléfono
+        return (
+          formData.companyName.trim() !== "" &&
+          validatePhoneNumber(formData.phoneNumber.trim())
+        );
       default:
         return false;
     }
   };
 
-  // Función para manejar el envío del formulario
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    // Simula un proceso de carga de 2 segundos
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    console.log("Form submitted:", formData); // Muestra los datos del formulario en la consola
-    setIsLoading(false);
-    // Aquí se enviaría los datos a un servidor
+  // Función para validar el correo electrónico
+  const validateEmail = (email: string): boolean => {
+    const re =
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@(([^<>()[\]\\.,;:\s@"]+\.)+[^<>()[\]\\.,;:\s@"]{2,})$/i;
+    return re.test(email.toLowerCase());
   };
+
+  // Función para validar el número de teléfono (simple validación)
+  const validatePhoneNumber = (phone: string): boolean => {
+    const re = /^\+?[1-9]\d{1,14}$/; // E.164 international format
+    return re.test(phone);
+  };
+
+  // Función para manejar el envío del formulario
+  const handleSubmit = async () => {
+    // Validación final antes de enviar
+    if (!isStepValid()) {
+      setError("Please fill out all required fields correctly.");
+      return;
+    }
+
+    setIsLoading(true);
+    setError("");
+
+    try {
+      // Simula un proceso de carga de 2 segundos
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      // Aquí se enviaría los datos a un servidor
+      console.log("Form submitted:", formData);
+
+      // Opcional: Resetear el formulario o mostrar una notificación de éxito
+      // resetForm();
+    } catch (err) {
+      setError(
+        "An error occurred while submitting the form. Please try again."
+      );
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Función para reiniciar el formulario después del envío exitoso
+  const resetForm = () => {
+    setFormData({
+      propertyType: "",
+      name: "",
+      email: "",
+      roomCount: "",
+      country: "",
+      language: "",
+      companyName: "",
+      phoneNumber: "",
+    });
+    setStep(0);
+  };
+
+  // Efecto para manejar posibles discrepancias de hidratación (opcional)
+  useEffect(() => {
+    // Puedes agregar lógica aquí si es necesario
+  }, []);
 
   return (
     // Contenedor principal del formulario con un fondo de gradiente y algunos estilos
@@ -158,7 +255,7 @@ export default function MultiStepForm() {
       </Box>
 
       {/* Formulario que se maneja paso a paso */}
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={(e) => e.preventDefault()}>
         <AnimatePresence mode="wait">
           {/* Animación que cambia con cada paso */}
           <motion.div
@@ -199,7 +296,7 @@ export default function MultiStepForm() {
                           },
                         }}
                       >
-                        <Icon sx={{ fontSize: 32 }} />
+                        {/* <Icon sx={{ fontSize: 32 }} /> */}
                         <Typography variant="body2" textAlign="center">
                           {label}
                         </Typography>
@@ -238,6 +335,13 @@ export default function MultiStepForm() {
                   margin="normal"
                   required
                   sx={{ mb: 2 }}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  error={formData.name.trim() === ""}
+                  helperText={
+                    formData.name.trim() === "" ? "Name is required." : ""
+                  }
                 />
                 <TextField
                   fullWidth
@@ -248,6 +352,20 @@ export default function MultiStepForm() {
                   onChange={handleInputChange}
                   margin="normal"
                   required
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  error={
+                    formData.email.trim() === "" ||
+                    !validateEmail(formData.email.trim())
+                  }
+                  helperText={
+                    formData.email.trim() === ""
+                      ? "Email is required."
+                      : !validateEmail(formData.email.trim())
+                      ? "Enter a valid email."
+                      : ""
+                  }
                 />
               </Box>
             )}
@@ -267,6 +385,23 @@ export default function MultiStepForm() {
                   onChange={handleInputChange}
                   margin="normal"
                   required
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  inputProps={{
+                    min: 1,
+                  }}
+                  error={
+                    formData.roomCount.trim() === "" ||
+                    Number(formData.roomCount) <= 0
+                  }
+                  helperText={
+                    formData.roomCount.trim() === ""
+                      ? "Number of rooms is required."
+                      : Number(formData.roomCount) <= 0
+                      ? "Number of rooms must be greater than 0."
+                      : ""
+                  }
                 />
               </Box>
             )}
@@ -282,7 +417,7 @@ export default function MultiStepForm() {
                   <Select
                     name="country"
                     value={formData.country}
-                    onChange={handleSelectChange}
+                    // onChange={handleSelectChange}
                     label="Country"
                   >
                     {countries.map((country) => (
@@ -297,11 +432,12 @@ export default function MultiStepForm() {
                   <Select
                     name="language"
                     value={formData.language}
-                    onChange={handleSelectChange}
+                    // onChange={handleSelectChange}
                     label="Preferred Language"
                   >
                     <MenuItem value="en">English</MenuItem>
                     <MenuItem value="es">Español</MenuItem>
+                    {/* Agrega más idiomas según sea necesario */}
                   </Select>
                 </FormControl>
               </Box>
@@ -321,6 +457,15 @@ export default function MultiStepForm() {
                   onChange={handleInputChange}
                   margin="normal"
                   required
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  error={formData.companyName.trim() === ""}
+                  helperText={
+                    formData.companyName.trim() === ""
+                      ? "Company name is required."
+                      : ""
+                  }
                 />
                 <TextField
                   fullWidth
@@ -331,31 +476,74 @@ export default function MultiStepForm() {
                   onChange={handleInputChange}
                   margin="normal"
                   required
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  error={
+                    formData.phoneNumber.trim() === "" ||
+                    !validatePhoneNumber(formData.phoneNumber.trim())
+                  }
+                  helperText={
+                    formData.phoneNumber.trim() === ""
+                      ? "Phone number is required."
+                      : !validatePhoneNumber(formData.phoneNumber.trim())
+                      ? "Enter a valid phone number (e.g., +123456789)."
+                      : ""
+                  }
                 />
               </Box>
             )}
           </motion.div>
         </AnimatePresence>
 
+        {/* Mensaje de error */}
+        {error && (
+          <Typography color="error" sx={{ mt: 2 }}>
+            {error}
+          </Typography>
+        )}
+
         {/* Botones de navegación entre pasos */}
-        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            mt: 3,
+            alignItems: "center",
+          }}
+        >
           <Button
             onClick={handleBack}
             variant="outlined"
             color="secondary"
-            disabled={step === 0}
+            disabled={step === 0 || isLoading}
             startIcon={<ArrowBack />}
           >
             Back
           </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={isStepValid() ? handleNext : undefined}
-            disabled={isLoading || !isStepValid()}
-          >
-            {step === 4 ? "Submit" : "Next"}
-          </Button>
+          <Box sx={{ position: "relative" }}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleNext}
+              disabled={isLoading || !isStepValid()}
+            >
+              {step === totalSteps - 1 ? "Submit" : "Next"}
+            </Button>
+            {isLoading && (
+              <CircularProgress
+                size={24}
+                sx={{
+                  color: theme.palette.primary.main,
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  marginTop: "-12px",
+                  marginLeft: "-12px",
+                }}
+              />
+            )}
+          </Box>
         </Box>
       </form>
     </Paper>
