@@ -4,6 +4,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { loginUser } from "@/services/authService";
+import { motion } from "framer-motion";
 
 interface LoginFormData {
   email: string;
@@ -25,6 +26,9 @@ const LoginPage: React.FC = () => {
       [e.target.name]: e.target.value,
     }));
   };
+
+  const [isFlipped, setIsFlipped] = useState(false);
+  const toggleForm = () => setIsFlipped(!isFlipped);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,7 +63,11 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div>
+    <motion.div
+      className="w-full h-[450px] [transform-style:preserve-3d] cursor-pointer"
+      animate={{ rotateY: isFlipped ? 180 : 0 }}
+      transition={{ duration: 0.6, ease: "easeInOut" }}
+    >
       <div>
         <h2 className="text-2xl font-bold mb-4 text-center">Iniciar Sesión</h2>
         {error && <p className="text-red-500 mb-4">{error}</p>}
@@ -106,12 +114,15 @@ const LoginPage: React.FC = () => {
         </form>
         <p className="mt-4 text-center">
           ¿No tienes una cuenta?{" "}
-          <a href="/register" className="text-blue-500 hover:underline">
+          <button
+            onClick={toggleForm}
+            className="ml-1 text-indigo-600 hover:underline focus:outline-none"
+          >
             Regístrate
-          </a> 
+          </button>
         </p>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

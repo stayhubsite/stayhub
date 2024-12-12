@@ -6,6 +6,7 @@ import Modal from "@mui/material/Modal"; // Componente modal (ventana emergente)
 import Button from "@mui/material/Button"; // Botón para interactuar
 import LoginPage from "@/app/login/page";
 import RegisterPage from "@/app/register/page";
+import AuthForm from "./auth-form";
 
 // Aquí definimos cómo se verá el modal (ventana emergente)
 // const style = {
@@ -64,45 +65,16 @@ export default function ModalRL() {
         aria-labelledby="modal-title" // Accesibilidad: título del modal
         aria-describedby="modal-description" // Accesibilidad: descripción del modal
       >
-        <Box className="max-w-md w-full bg-white p-6 rounded shadow fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+        <Box className=" rounded shadow fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
           {/* Vista inicial: opciones para registro o login */}
           {step === "initial" && (
             <>
-              <h2 id="modal-title">Bienvenido</h2>
               <p id="modal-description">
                 Selecciona una opción para continuar.
               </p>
               {/* Botones para cambiar de vista */}
-              <Button onClick={handleRegisterClick} sx={{ m: 1 }}>
-                Registro
-              </Button>
-              <Button onClick={handleLoginClick} sx={{ m: 1 }}>
-                Login
-              </Button>
-            </>
-          )}
 
-          {/* Vista de registro */}
-          {step === "register" && (
-            <>
-              <h2 id="modal-title">Registro</h2>
-              <p id="modal-description">
-                Por favor, completa tus datos para registrarte.
-              </p>
-              <RegisterPage />
-              <Button onClick={handleClose}>Cerrar</Button>
-            </>
-          )}
-
-          {/* Vista de login */}
-          {step === "login" && (
-            <>
-              <h2 id="modal-title">Login</h2>
-              <p id="modal-description">
-                Ingresa tus credenciales para acceder.
-              </p>
-              <LoginPage />
-              <Button onClick={handleClose}>Cerrar</Button>
+              <AuthForm />
             </>
           )}
         </Box>

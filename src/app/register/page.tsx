@@ -3,7 +3,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-
+import { motion } from "framer-motion";
 interface RegisterFormData {
   email: string;
   password: string;
@@ -11,6 +11,10 @@ interface RegisterFormData {
 }
 
 const RegisterPage: React.FC = () => {
+  const [isFlipped, setIsFlipped] = useState(false);
+
+  const toggleForm = () => setIsFlipped(!isFlipped);
+
   const router = useRouter();
   const [formData, setFormData] = useState<RegisterFormData>({
     email: "",
@@ -59,6 +63,7 @@ const RegisterPage: React.FC = () => {
 
   return (
     // <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+
     <div>
       <h2 className="text-2xl font-bold mb-4 text-center">Registro</h2>
       {error && <p className="text-red-500 mb-4">{error}</p>}
@@ -117,12 +122,14 @@ const RegisterPage: React.FC = () => {
       </form>
       <p className="mt-4 text-center">
         ¿Ya tienes una cuenta?{" "}
-        <a href="/login" className="text-blue-500 hover:underline">
-          Inicia Sesión
-        </a>
+        <button
+          onClick={toggleForm}
+          className="ml-1 text-indigo-600 hover:underline focus:outline-none"
+        >
+          Inicia sesión
+        </button>
       </p>
     </div>
-    // </div>
   );
 };
 
