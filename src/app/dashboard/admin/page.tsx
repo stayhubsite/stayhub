@@ -1,14 +1,15 @@
-'use client';
+// app/dashboard/admin/page.tsx
+"use client";
 
-import React from 'react';
+import RequireRole from "@/components/RequireRole";
 
-const AdminDashboard: React.FC = () => {
+export default function AdminDashboard() {
   return (
-    <div className="p-4">
-      <h1 className="text-3xl font-bold">Dashboard Admin</h1>
-      {/* Contenido específico para superadmin */}
-    </div>
+    <RequireRole requiredRoles={[1, 2]} >
+      <div>
+        <h1>Panel de Administración</h1>
+        <p>Solo superadmins (1) y admins (2) pueden ver esto.</p>
+      </div>
+    </RequireRole>
   );
-};
-
-export default AdminDashboard;
+}

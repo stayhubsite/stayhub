@@ -4,8 +4,7 @@ import * as React from "react"; // React para crear el componente
 import Box from "@mui/material/Box"; // Caja para el contenido del modal
 import Modal from "@mui/material/Modal"; // Componente modal (ventana emergente)
 import Button from "@mui/material/Button"; // Botón para interactuar
-import LoginPage from "@/app/login/page";
-import RegisterPage from "@/app/register/page";
+
 import AuthForm from "./auth-form";
 
 // Aquí definimos cómo se verá el modal (ventana emergente)
