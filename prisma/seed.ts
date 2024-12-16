@@ -18,13 +18,13 @@ async function main() {
   }
 
   // Crear superadmin si no existe
-  const superadminEmail = "superadmin@tuapp.com";
+  const superadminEmail = "JU4NC4R1D4D@gmail.com";
   const existingSuperadmin = await prisma2.user.findUnique({
     where: { email: superadminEmail },
   });
 
   if (!existingSuperadmin) {
-    const hashedPassword = await bcrypt.hash("TuContraseñaSegura", 10);
+    const hashedPassword = await bcrypt.hash("jccg210507.", 10);
 
     const superadminRole = await prisma2.role.findUnique({
       where: { name: "superadmin" },

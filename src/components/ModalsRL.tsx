@@ -5,20 +5,22 @@ import Box from "@mui/material/Box"; // Caja para el contenido del modal
 import Modal from "@mui/material/Modal"; // Componente modal (ventana emergente)
 import Button from "@mui/material/Button"; // Botón para interactuar
 
+import AuthForm from "./auth-form";
+
 // Aquí definimos cómo se verá el modal (ventana emergente)
-const style = {
-  position: "absolute", // La posición será absoluta dentro de la pantalla
-  top: "50%", // Centrado verticalmente
-  left: "50%", // Centrado horizontalmente
-  transform: "translate(-50%, -50%)", // Ajusta para que quede perfectamente centrado
-  width: 400, // Ancho del modal
-  bgcolor: "background.paper", // Color de fondo del modal
-  border: "2px solid #000", // Borde negro de 2px
-  boxShadow: 24, // Sombra para que se vea "elevado"
-  pt: 2, // Espacio en la parte de arriba (padding top)
-  px: 4, // Espacio a los lados (padding horizontal)
-  pb: 3, // Espacio en la parte de abajo (padding bottom)
-};
+// const style = {
+//   position: "absolute", // La posición será absoluta dentro de la pantalla
+//   top: "50%", // Centrado verticalmente
+//   left: "50%", // Centrado horizontalmente
+//   transform: "translate(-50%, -50%)", // Ajusta para que quede perfectamente centrado
+//   width: 400, // Ancho del modal
+//   bgcolor: "background.paper", // Color de fondo del modal
+//   border: "2px solid #000", // Borde negro de 2px
+//   boxShadow: 24, // Sombra para que se vea "elevado"
+//   pt: 2, // Espacio en la parte de arriba (padding top)
+//   px: 4, // Espacio a los lados (padding horizontal)
+//   pb: 3, // Espacio en la parte de abajo (padding bottom)
+// };
 
 // Aquí creamos el componente principal del modal
 export default function ModalRL() {
@@ -62,45 +64,16 @@ export default function ModalRL() {
         aria-labelledby="modal-title" // Accesibilidad: título del modal
         aria-describedby="modal-description" // Accesibilidad: descripción del modal
       >
-        <Box sx={{ ...style, width: 400 }}>
+        <Box className=" rounded shadow fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
           {/* Vista inicial: opciones para registro o login */}
           {step === "initial" && (
             <>
-              <h2 id="modal-title">Bienvenido</h2>
               <p id="modal-description">
                 Selecciona una opción para continuar.
               </p>
               {/* Botones para cambiar de vista */}
-              <Button onClick={handleRegisterClick} sx={{ m: 1 }}>
-                Registro
-              </Button>
-              <Button onClick={handleLoginClick} sx={{ m: 1 }}>
-                Login
-              </Button>
-            </>
-          )}
 
-          {/* Vista de registro */}
-          {step === "register" && (
-            <>
-              <h2 id="modal-title">Registro</h2>
-              <p id="modal-description">
-                Por favor, completa tus datos para registrarte.
-              </p>
-              {/* Aquí puedes agregar un formulario para registro */}
-              <Button onClick={handleClose}>Cerrar</Button>
-            </>
-          )}
-
-          {/* Vista de login */}
-          {step === "login" && (
-            <>
-              <h2 id="modal-title">Login</h2>
-              <p id="modal-description">
-                Ingresa tus credenciales para acceder.
-              </p>
-              {/* Aquí puedes agregar un formulario para login */}
-              <Button onClick={handleClose}>Cerrar</Button>
+              <AuthForm />
             </>
           )}
         </Box>
