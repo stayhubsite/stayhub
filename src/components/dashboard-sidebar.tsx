@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  TypeIcon as type,
   LucideIcon,
   LayoutDashboard,
   BedDouble,
@@ -12,7 +11,6 @@ import {
   Settings,
 } from "lucide-react";
 
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 interface NavItem {

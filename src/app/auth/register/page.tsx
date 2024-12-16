@@ -8,7 +8,7 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-  const [roleId, setRoleId] = useState<number>(3); // Por defecto 'user' (3)
+  const [roleId] = useState<number>(3); // Por defecto 'user' (3)
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<boolean>(false);

@@ -22,17 +22,39 @@ import { FeaturedRooms } from "@/components/featured-rooms";
 import { BookingCalendar } from "@/components/calendar";
 import { RevenueAnalysis } from "@/components/revenue-analysis";
 
-const featuredRooms = [
+type Room = {
+  id: number;
+  number: string;
+  type: string;
+  status: "disponible" | "ocupada" | "limpieza";  // Definir los valores posibles para 'status'
+  price: number;
+};
+
+
+const featuredRooms: Room[] = [
   {
     id: 1,
     number: "101",
     type: "Individual",
-    status: "disponible",
+    status: "disponible", // Este valor debe coincidir con los valores válidos definidos en 'Room'
     price: 100,
   },
-  { id: 2, number: "102", type: "Doble", status: "ocupada", price: 150 },
-  { id: 3, number: "103", type: "Suite", status: "limpieza", price: 250 },
+  {
+    id: 2,
+    number: "102",
+    type: "Doble",
+    status: "ocupada",
+    price: 150,
+  },
+  {
+    id: 3,
+    number: "103",
+    type: "Suite",
+    status: "limpieza",
+    price: 250,
+  },
 ];
+
 
 const DashboardPage: React.FC = () => {
   return (

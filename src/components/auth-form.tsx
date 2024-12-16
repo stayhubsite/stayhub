@@ -26,8 +26,6 @@ export default function AuthForm() {
     name: "",
   });
   const [error, setError] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
-  const [successRegister, setSuccessRegister] = useState<string>("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({
@@ -44,7 +42,6 @@ export default function AuthForm() {
     e.preventDefault();
 
     setError("");
-    setLoading(true);
 
     const { email, password } = formData;
 
@@ -70,13 +67,12 @@ export default function AuthForm() {
       setError(response.message);
     }
 
-    setLoading(false);
   };
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    setSuccessRegister("");
+
 
     try {
       const res = await fetch("/api/register", {
@@ -90,7 +86,6 @@ export default function AuthForm() {
       const data = await res.json();
 
       if (res.ok) {
-        setSuccessRegister("Registro exitoso. Redirigiendo a login...");
         setTimeout(() => {
           router.push("/");
         }, 2000);

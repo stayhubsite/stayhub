@@ -1,12 +1,10 @@
-// app/api/auth/[...nextauth]/route.ts
-
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import prisma from "@/lib/prisma";
 import bcrypt from "bcrypt";
 
-export const authOptions: NextAuthOptions = {
+const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     CredentialsProvider({
@@ -15,12 +13,11 @@ export const authOptions: NextAuthOptions = {
         email: { label: "Correo Electrónico", type: "email", placeholder: "email@example.com" },
         password: { label: "Contraseña", type: "password" },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         if (!credentials?.email || !credentials.password) {
           throw new Error("Correo electrónico y contraseña son requeridos");
         }
 
-        // Buscar el usuario en la base de datos sin incluir la relación role
         const user = await prisma.user.findUnique({
           where: { email: credentials.email },
           select: {
@@ -39,14 +36,12 @@ export const authOptions: NextAuthOptions = {
           throw new Error("Usuario no encontrado");
         }
 
-        // Comparar la contraseña
         const isValid = await bcrypt.compare(credentials.password, user.password);
 
         if (!isValid) {
           throw new Error("Contraseña incorrecta");
         }
 
-        // Retornar el usuario sin la contraseña y sin el objeto role
         return {
           id: user.id,
           name: user.name,

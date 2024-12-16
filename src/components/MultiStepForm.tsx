@@ -11,7 +11,6 @@ import {
   Paper,
   Avatar,
   AvatarGroup,
-  IconButton,
   useTheme,
   TextField,
   Select,
@@ -125,14 +124,6 @@ export default function MultiStepForm() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Función para manejar el cambio de los selectores (como país o idioma)
-  const handleSelectChange = (
-    e: React.ChangeEvent<{ name?: string; value: unknown }>
-  ) => {
-    const name = e.target.name as string;
-    const value = e.target.value as string;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
 
   // Total de pasos del formulario
   const totalSteps = 5;
@@ -207,21 +198,6 @@ export default function MultiStepForm() {
     }
   };
 
-  // Función para reiniciar el formulario después del envío exitoso
-  const resetForm = () => {
-    setFormData({
-      propertyType: "",
-      name: "",
-      email: "",
-      roomCount: "",
-      country: "",
-      language: "",
-      companyName: "",
-      phoneNumber: "",
-    });
-    setStep(0);
-  };
-
   // Efecto para manejar posibles discrepancias de hidratación (opcional)
   useEffect(() => {
     // Puedes agregar lógica aquí si es necesario
@@ -272,7 +248,7 @@ export default function MultiStepForm() {
                   What type of property do you manage?
                 </Typography>
                 <Grid container spacing={2} sx={{ mb: 4 }}>
-                  {propertyTypes.map(({ id, label, icon: Icon }) => (
+                  {propertyTypes.map(({ id, label }) => (
                     <Grid item xs={6} sm={4} key={id}>
                       <Paper
                         onClick={() =>
@@ -296,7 +272,6 @@ export default function MultiStepForm() {
                           },
                         }}
                       >
-                        {/* <Icon sx={{ fontSize: 32 }} /> */}
                         <Typography variant="body2" textAlign="center">
                           {label}
                         </Typography>

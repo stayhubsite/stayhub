@@ -1,10 +1,9 @@
 "use client"
 
 import { useState, useMemo } from "react"
-import { BedDouble, Search } from 'lucide-react'
+import { BedDouble } from 'lucide-react'
 
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,

@@ -11,7 +11,6 @@ import {
   Container,
   Button,
   MenuItem,
-  useTheme,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import LanguageIcon from "@mui/icons-material/Language";
@@ -25,8 +24,6 @@ export default function Navbar() {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   // Estado para manejar el menú de selección de idioma.
   const [anchorElLang, setAnchorElLang] = useState<null | HTMLElement>(null);
-  // Tema actual de la aplicación.
-  const theme = useTheme();
 
   // Abre el menú de navegación.
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
