@@ -4,11 +4,10 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import bcrypt from "bcrypt";
 
-// Definición de tipos para mayor seguridad
 type RegisterRequest = {
   email: string;
   password: string;
-  name: string;
+  name?: string; // `name` es opcional según el esquema
   roleId: number;
 };
 
@@ -18,7 +17,7 @@ export async function POST(request: Request) {
     const { email, password, name, roleId }: RegisterRequest = await request.json();
 
     // Validar campos requeridos
-    if (!email || !password || !name || !roleId) {
+    if (!email || !password || !roleId) {
       return NextResponse.json(
         { message: "Faltan campos requeridos" },
         { status: 400 }
@@ -42,10 +41,9 @@ export async function POST(request: Request) {
       data: {
         email,
         password: hashedPassword,
-        name,
+        name, // Puede ser `undefined` y Prisma lo manejará como opcional
         roleId,
-        // Si hotelId es opcional y puede no estar presente, puedes manejarlo así:
-        // hotelId: someCondition ? someValue : undefined,
+        // hotelId es opcional, así que no es necesario incluirlo si no está presente
       },
       select: {
         id: true,
