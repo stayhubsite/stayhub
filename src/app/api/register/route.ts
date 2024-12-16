@@ -10,11 +10,6 @@ const registerSchema = z.object({
   name: z.string().optional(),
 });
 
-interface RegisterRequestBody {
-  email: string;
-  password: string;
-  name?: string;
-}
 
 export async function POST(request: Request) {
   try {

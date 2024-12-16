@@ -1,5 +1,4 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-// import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, Legend } from "recharts"
 
 const data = [
   { month: "Ene", ingresos: 4000, gastos: 2400 },
@@ -10,9 +9,7 @@ const data = [
   { month: "Jun", ingresos: 2390, gastos: 3800 },
 ];
 
-interface RevenueAnalysisProps extends React.HTMLAttributes<HTMLDivElement> {}
-
-export function RevenueAnalysis({ className, ...props }: RevenueAnalysisProps) {
+export function RevenueAnalysis({ className, ...props }: { className?: string }) {
   const totalIngresos = data.reduce((sum, item) => sum + item.ingresos, 0);
   const totalGastos = data.reduce((sum, item) => sum + item.gastos, 0);
   const beneficioNeto = totalIngresos - totalGastos;
@@ -37,16 +34,6 @@ export function RevenueAnalysis({ className, ...props }: RevenueAnalysisProps) {
             <p className="text-2xl font-bold">${beneficioNeto}</p>
           </div>
         </div>
-        {/* <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={data}>
-            <XAxis dataKey="month" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="ingresos" fill="#8884d8" name="Ingresos" />
-            <Bar dataKey="gastos" fill="#82ca9d" name="Gastos" />
-          </BarChart>
-        </ResponsiveContainer> */}
       </CardContent>
     </Card>
   );

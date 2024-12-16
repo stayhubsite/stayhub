@@ -9,15 +9,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-const data = [
-  { name: "Ene", disponibles: 20, ocupadas: 35, limpieza: 5 },
-  { name: "Feb", disponibles: 15, ocupadas: 40, limpieza: 5 },
-  { name: "Mar", disponibles: 25, ocupadas: 30, limpieza: 5 },
-  { name: "Abr", disponibles: 22, ocupadas: 33, limpieza: 5 },
-  { name: "May", disponibles: 18, ocupadas: 37, limpieza: 5 },
-  { name: "Jun", disponibles: 30, ocupadas: 25, limpieza: 5 },
-];
-
 export function RoomOverview() {
   return (
     <Card className="col-span-full">

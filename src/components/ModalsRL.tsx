@@ -42,15 +42,6 @@ export default function ModalRL() {
     setStep("initial"); // Reiniciamos la vista a la inicial
   };
 
-  // Función para cambiar a la vista de registro
-  const handleRegisterClick = () => {
-    setStep("register"); // Cambiamos el paso a registro
-  };
-
-  // Función para cambiar a la vista de login
-  const handleLoginClick = () => {
-    setStep("login"); // Cambiamos el paso a login
-  };
 
   // Lo que se verá en pantalla
   return (
